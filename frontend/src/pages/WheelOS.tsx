@@ -1,4 +1,4 @@
-import { Activity, CircleDollarSign, Gauge, ShieldCheck, TrendingUp } from 'lucide-react'
+import { Activity, CircleDollarSign, Gauge, Link2, ShieldCheck, TrendingUp } from 'lucide-react'
 
 const metrics = [
   ['VIX / VVIX', '— / —', 'Volatility'],
@@ -8,8 +8,8 @@ const metrics = [
 ]
 
 const wheels = [
-  { symbol: 'SPY', status: 'WAIT', action: '等待市场数据', dte: '7–30D', delta: '0.08–0.12', position: '—' },
-  { symbol: 'QQQ', status: 'WAIT', action: '等待市场数据', dte: '7–30D', delta: '0.08–0.12', position: '—' },
+  { symbol: 'SPY', status: 'WAIT', action: '等待 Moomoo 市场数据', dte: '7–30D', delta: '0.08–0.12', position: '—' },
+  { symbol: 'QQQ', status: 'WAIT', action: '等待 Moomoo 市场数据', dte: '7–30D', delta: '0.08–0.12', position: '—' },
 ]
 
 export function WheelOS() {
@@ -28,41 +28,33 @@ export function WheelOS() {
           </div>
         </header>
 
-        <section className="grid gap-3 md:grid-cols-4">
-          {metrics.map(([label, value, note]) => (
-            <div key={label} className="rounded-xl border border-border bg-elevated/35 p-4">
-              <div className="text-xs text-muted">{label}</div>
-              <div className="mt-2 font-mono text-xl font-semibold">{value}</div>
-              <div className="mt-1 text-[11px] text-secondary">{note}</div>
+        <section className="rounded-xl border border-border bg-elevated/30 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2"><Link2 className="h-4 w-4 text-accent"/><h2 className="font-semibold">Moomoo Connection</h2></div>
+              <p className="mt-2 text-xs text-secondary">Read-only · quote:read + trade:read · 自动交易关闭</p>
             </div>
-          ))}
+            <div className="rounded-lg border border-warning/40 bg-warning/10 px-4 py-2 text-sm font-medium text-warning">BACKEND SETUP</div>
+          </div>
+          <div className="mt-4 grid gap-3 text-sm md:grid-cols-4">
+            <div><div className="text-[10px] text-muted">CONNECTION</div><div className="mt-1 font-mono">NOT CONNECTED</div></div>
+            <div><div className="text-[10px] text-muted">MARKET DATA</div><div className="mt-1 font-mono">PENDING</div></div>
+            <div><div className="text-[10px] text-muted">POSITIONS</div><div className="mt-1 font-mono">PENDING</div></div>
+            <div><div className="text-[10px] text-muted">TRADING</div><div className="mt-1 font-mono text-muted">DISABLED</div></div>
+          </div>
+          <p className="mt-4 text-xs text-muted">Connect 按钮会在服务器端 callback、session/token 安全存储和健康检查完成后启用；不会把 Token 放进浏览器或 GitHub。</p>
+        </section>
+
+        <section className="grid gap-3 md:grid-cols-4">
+          {metrics.map(([label, value, note]) => <div key={label} className="rounded-xl border border-border bg-elevated/35 p-4"><div className="text-xs text-muted">{label}</div><div className="mt-2 font-mono text-xl font-semibold">{value}</div><div className="mt-1 text-[11px] text-secondary">{note}</div></div>)}
         </section>
 
         <section className="grid gap-4 lg:grid-cols-3">
           <div className="rounded-xl border border-border bg-elevated/30 p-5 lg:col-span-2">
             <div className="mb-4 flex items-center gap-2"><TrendingUp className="h-4 w-4 text-accent" /><h2 className="font-semibold">Wheel Decision Engine</h2></div>
-            <div className="space-y-3">
-              {wheels.map(w => (
-                <div key={w.symbol} className="grid grid-cols-2 gap-3 rounded-lg border border-border/70 bg-base/50 p-4 md:grid-cols-6">
-                  <div><div className="text-[10px] text-muted">ETF</div><div className="mt-1 text-lg font-bold">{w.symbol}</div></div>
-                  <div><div className="text-[10px] text-muted">STATUS</div><div className="mt-1 font-mono text-warning">{w.status}</div></div>
-                  <div className="md:col-span-2"><div className="text-[10px] text-muted">ACTION</div><div className="mt-1 text-sm">{w.action}</div></div>
-                  <div><div className="text-[10px] text-muted">DTE / Δ</div><div className="mt-1 font-mono text-xs">{w.dte}<br />{w.delta}</div></div>
-                  <div><div className="text-[10px] text-muted">SIZE</div><div className="mt-1 font-mono">{w.position}</div></div>
-                </div>
-              ))}
-            </div>
+            <div className="space-y-3">{wheels.map(w => <div key={w.symbol} className="grid grid-cols-2 gap-3 rounded-lg border border-border/70 bg-base/50 p-4 md:grid-cols-6"><div><div className="text-[10px] text-muted">ETF</div><div className="mt-1 text-lg font-bold">{w.symbol}</div></div><div><div className="text-[10px] text-muted">STATUS</div><div className="mt-1 font-mono text-warning">{w.status}</div></div><div className="md:col-span-2"><div className="text-[10px] text-muted">ACTION</div><div className="mt-1 text-sm">{w.action}</div></div><div><div className="text-[10px] text-muted">DTE / Δ</div><div className="mt-1 font-mono text-xs">{w.dte}<br />{w.delta}</div></div><div><div className="text-[10px] text-muted">SIZE</div><div className="mt-1 font-mono">{w.position}</div></div></div>)}</div>
           </div>
-
-          <div className="rounded-xl border border-border bg-elevated/30 p-5">
-            <div className="mb-4 flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-accent" /><h2 className="font-semibold">Risk Budget</h2></div>
-            <div className="space-y-4 text-sm">
-              <div className="flex justify-between border-b border-border/60 pb-3"><span className="text-muted">Net Liquidation</span><span className="font-mono">—</span></div>
-              <div className="flex justify-between border-b border-border/60 pb-3"><span className="text-muted">Cash Available</span><span className="font-mono">—</span></div>
-              <div className="flex justify-between border-b border-border/60 pb-3"><span className="text-muted">PUT Cash Secured</span><span className="font-mono">—</span></div>
-              <div className="flex justify-between"><span className="text-muted">Single-trade risk limit</span><span className="font-mono">0.10%</span></div>
-            </div>
-          </div>
+          <div className="rounded-xl border border-border bg-elevated/30 p-5"><div className="mb-4 flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-accent" /><h2 className="font-semibold">Risk Budget</h2></div><div className="space-y-4 text-sm"><div className="flex justify-between border-b border-border/60 pb-3"><span className="text-muted">Net Liquidation</span><span className="font-mono">—</span></div><div className="flex justify-between border-b border-border/60 pb-3"><span className="text-muted">Cash Available</span><span className="font-mono">—</span></div><div className="flex justify-between border-b border-border/60 pb-3"><span className="text-muted">PUT Cash Secured</span><span className="font-mono">—</span></div><div className="flex justify-between"><span className="text-muted">Single-trade risk limit</span><span className="font-mono">0.10%</span></div></div></div>
         </section>
 
         <section className="grid gap-4 md:grid-cols-3">
