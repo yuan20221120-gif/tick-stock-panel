@@ -41,18 +41,19 @@ function OnboardingGuard({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
-function RouteFallback() { return <div className="min-h-full bg-base grid place-items-center"><Logo size={28} className="text-foreground" /></div> }
+function RouteFallback() { return <div className="min-h-screen bg-base grid place-items-center"><Logo size={28} className="text-foreground" /></div> }
 
 export const router = createBrowserRouter([
+  { path: '/', element: <Suspense fallback={<RouteFallback />}><WheelOS /></Suspense> },
+  { path: '/wheel', element: <Suspense fallback={<RouteFallback />}><WheelOS /></Suspense> },
   { path: '/onboarding', element: <Suspense fallback={<RouteFallback />}><Onboarding /></Suspense> },
   { path: '/login', element: <Suspense fallback={<RouteFallback />}><Auth /></Suspense> },
   {
-    path: '/', element: <OnboardingGuard><Layout /></OnboardingGuard>, children: [
-      { index: true, element: <WheelOS /> },
-      { path: 'wheel', element: <WheelOS /> },
+    path: '/app', element: <OnboardingGuard><Layout /></OnboardingGuard>, children: [
+      { index: true, element: <Dashboard /> },
       { path: 'legacy-dashboard', element: <Dashboard /> },
-      { path: 'overview', element: <Navigate to="/" replace /> },
-      { path: 'analysis', element: <Navigate to="/settings?tab=pages&section=ext-pages" replace /> },
+      { path: 'overview', element: <Dashboard /> },
+      { path: 'analysis', element: <Navigate to="/app/settings?tab=pages&section=ext-pages" replace /> },
       { path: 'analysis/:menuId', element: <AnalysisDetail /> },
       { path: 'watchlist', element: <Watchlist /> },
       { path: 'screener', element: <Screener /> },
@@ -65,9 +66,9 @@ export const router = createBrowserRouter([
       { path: 'branding', element: <Branding /> },
       { path: 'settings', element: <Settings /> },
       { path: 'dev', element: <Dev /> },
-      { path: 'settings/keys', element: <Navigate to="/settings?tab=data-sources" replace /> },
-      { path: 'settings/ai', element: <Navigate to="/settings?tab=ai" replace /> },
-      { path: 'settings/queries', element: <Navigate to="/settings?tab=queries" replace /> },
+      { path: 'settings/keys', element: <Navigate to="/app/settings?tab=data-sources" replace /> },
+      { path: 'settings/ai', element: <Navigate to="/app/settings?tab=ai" replace /> },
+      { path: 'settings/queries', element: <Navigate to="/app/settings?tab=queries" replace /> },
       ...frontendExtensionRoutes.map(route => { const ExtensionPage = route.component; return { path: route.path.slice(1), element: <ExtensionBoundary extensionId={route.extensionId}><ExtensionPage /></ExtensionBoundary> } }),
     ],
   },
